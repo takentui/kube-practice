@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "kube-practice"
+version = "0.1.0"
+description = ""
+authors = ["takentui <takentui@gmail.com>"]
+readme = "README.md"
+packages = [{include = "kube_practice"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.114.0"
+uvicorn = "^0.30.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
