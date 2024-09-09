@@ -139,23 +139,17 @@ k9s
 ```shell
 kubectl apply -f kube-practice_0.1.0.yaml
 ```
-Дергаем ручку `POST /sleep`, после чего
+Дергаем ручку `GET /factorial`, после чего
 проверяем логи нашего pod'a или деплоймента (k9s, lens), мы должны увидеть такое
 
 ```shell
-INFO:     Started server process [7]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-[2024-09-08 18:37:49 INFO] root | sleep called
-[2024-09-08 18:37:59 INFO] root | prepare answer
-INFO:     172.17.0.1:21982 - "POST /sleep HTTP/1.1" 200 OK
-[2024-09-08 18:38:24 INFO] root | sleep called
-[2024-09-08 18:38:34 INFO] root | prepare answer
-INFO:     172.17.0.1:47667 - "POST /sleep HTTP/1.1" 200 OK
+│ kube-practice-59c8c7ff84-88tqb [2024-09-09 20:23:38 INFO] root | Start calculating                                                                                                                                 │
+│ kube-practice-59c8c7ff84-88tqb [2024-09-09 20:23:38 INFO] root | prepare answer                                                                                                                                    │
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:25:09 INFO] root | Start calculating                                                                                                                                 │
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:25:09 INFO] root | prepare answer                                                                                                                                    │
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:4857 - "GET /factorial HTTP/1.1" 200 OK
 ```
 
-Ну и наша ручка работала 10 секунд
 
 ### Deployment scaling
 
@@ -189,12 +183,19 @@ chmod +x parallel.sh
 Смотрим логи деплоймента и видим, что трафик разбежался по разным подам
 
 ```shell
- kube-practice-7dd8d8d4c9-4lhns INFO:     172.17.0.1:12237 - "POST /sleep HTTP/1.1" 200 OK                              ││ kube-practice-7dd8d8d4c9-4lhns [2024-09-08 18:52:10 INFO] root | prepare answer                                        ││ kube-practice-7dd8d8d4c9-4lhns [2024-09-08 18:52:10 INFO] root | prepare answer                                        ││ kube-practice-7dd8d8d4c9-4lhns INFO:     172.17.0.1:39836 - "POST /sleep HTTP/1.1" 200 OK                              ││ kube-practice-7dd8d8d4c9-jjgtl [2024-09-08 18:52:10 INFO] root | prepare answer                                        ││ kube-practice-7dd8d8d4c9-jjgtl INFO:     172.17.0.1:11702 - "POST /sleep HTTP/1.1" 200 OK                              ││ kube-practice-7dd8d8d4c9-jjgtl INFO:     172.17.0.1:10878 - "POST /sleep HTTP/1.1" 200 OK                              │
-│ kube-practice-7dd8d8d4c9-jjgtl [2024-09-08 18:52:10 INFO] root | prepare answer                                        │
-│ kube-practice-7dd8d8d4c9-xzfdg [2024-09-08 18:52:10 INFO] root | prepare answer                                        │
-│ kube-practice-7dd8d8d4c9-xzfdg INFO:     172.17.0.1:48193 - "POST /sleep HTTP/1.1" 200 OK                              │
-│ kube-practice-7dd8d8d4c9-xzfdg [2024-09-08 18:52:10 INFO] root | prepare answer                                        │
-│ kube-practice-7dd8d8d4c9-xzfdg INFO:     172.17.0.1:20277 - "POST /sleep HTTP/1.1" 200 OK
+ │ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | Start calculating                  
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | prepare answer                      
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | Start calculating                   
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | prepare answer                      
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | Start calculating                   
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:19893 - "GET /factorial?n=1000 HTTP/1.1" 200 OK  
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:25142 - "GET /factorial?n=1000 HTTP/1.1" 200 OK  
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:6744 - "GET /factorial?n=1000 HTTP/1.1" 200 OK   
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:59731 - "GET /factorial?n=1000 HTTP/1.1" 200 OK  
+│ kube-practice-59c8c7ff84-c46rr [2024-09-09 20:23:18 INFO] root | prepare answer                      
+│ kube-practice-59c8c7ff84-88tqb INFO:     172.17.0.1:33814 - "GET /factorial?n=1000 HTTP/1.1" 200 OK  
+│ kube-practice-59c8c7ff84-88tqb [2024-09-09 20:23:19 INFO] root | Start calculating                   
+│ kube-practice-59c8c7ff84-88tqb [2024-09-09 20:23:19 INFO] root | prepare answer
 ```
 
 ### Катим новый релиз
@@ -290,6 +291,14 @@ containers:
 
 ```shell
 kubectl apply -f kube-practice_0.2.0.yaml 
+```
+
+Теперь мы видим как кубер дергает нашу ручку `GET /ping`
+
+```shell
+│ kube-practice-59c8c7ff84-c46rr INFO:     172.17.0.1:38146 - "GET /ping HTTP/1.1" 200 OK 
+│ kube-practice-59c8c7ff84-tl5vr INFO:     172.17.0.1:35128 - "GET /ping HTTP/1.1" 200 OK 
+│ kube-practice-59c8c7ff84-88tqb INFO:     172.17.0.1:37840 - "GET /ping HTTP/1.1" 200 OK
 ```
 
 _*Попробуй нарочно сломай под. Например сделай версию, в которой пинг будет рандомно отвечать 200 или 400 и перекати деплоймент_
