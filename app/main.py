@@ -37,18 +37,21 @@ logging.config.dictConfig(LOGGING)
 app = FastAPI()
 
 
-@app.post("/sleep")
-async def do_sleep():
-    logging.info('sleep called')
-    sleep_time = os.getenv("SLEEP_TIME", None)
-    if not sleep_time:
-        logging.warning('Env variable is empty')
-        raise HTTPException(status_code=400, detail="Empty env var")
+@app.get("/factorial")
+async def get_factorial(n: int | None = None) -> int:
+    if n is None:
+        n = int(os.getenv('DEFAULT_N', 0))
+    logging.info('Start calculating')
+    if not n:
+        logging.warning('N is less than 1')
+        raise HTTPException(status_code=400, detail="WTF bro?")
 
-    await asyncio.sleep(int(sleep_time))
+    result = 1
+    for i in range(n):
+        result *= i + 1
 
     logging.info('prepare answer')
-    return {"time": sleep_time}
+    return result
 
 
 @app.get(
