@@ -1,39 +1,39 @@
-# Kube practise repository
+# Kube practice repository
 Этот репозиторий сделан для отработки базовых знаний по k8s (kubernetes)
 
 ## Подготовка
 
 Нам нужно установить некоторые штуки заранее
 
-### Docker
-Сам докер 
-[docker install](https://www.docker.com/)
+### Обязательно
 
-### Minikube
-Локальный кубернетес для отработки практики
+- **[Docker](https://www.docker.com/)** - сам докер 
+- **[Minikube](https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Farm64%2Fstable%2Fbinary+download)** - локальный кубернетес для отработки практики
 
-[minikube install](https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Farm64%2Fstable%2Fbinary+download)
+  Для мака можно использовать brew
 
-[minikube 101 course](https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/)
-Для мака можно использовать brew
+  ```shell
+  brew install minikube
+  ```
 
-```shell
-brew install minikube
-```
-### K9s
-Терминальная утилита для работы с кубер-кластером
+- **[k9s](https://k9scli.io/topics/install/)** - CLI утилита для работы с кубер-кластером
 
-[k9s install](https://k9scli.io/topics/install/)
+  Для мака можно использовать команду
+  ```shell
+  brew install derailed/k9s/k9s
+  ```
 
-Для мака можно использовать команду
+### Опционально
 
-```shell
-brew install derailed/k9s/k9s
-```
-### Lens
-GUI IDE для работы с кубер кластером
+ - **[Lens](https://docs.k8slens.dev/getting-started/install-lens/)** или **[OpenLens](https://github.com/MuhammedKalkan/OpenLens)** - GUI IDE для работы с кубер кластером
 
-[lens install](https://docs.k8slens.dev/getting-started/install-lens/)
+
+### Материалы
+
+- [minikube 101 course](https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/)
+- [k9s tutorial](https://medium.com/@dangreenlee_/deep-dive-into-k9s-supercharge-your-kubernetes-workflow-629a6e1b7305)
+- [Lens course](https://www.youtube.com/watch?v=VOruC2tQbmw)
+
 
 ## Подготавливаем кластер
 
@@ -101,7 +101,7 @@ http://127.0.0.1:54987
 
 ```
 
-Теперь мы можем подергать ручки в сваггере
+Тут у тебя может быть другой IP и/или порт - этот адрес нам ещё понадобится. Теперь можно подергать ручки в сваггере
 
 ### Открываем k9s
 
@@ -174,7 +174,7 @@ kubectl scale deployments/kube-practice --replicas=5
 После любого из способов проверьте кол-во подов у вашего деплоймента, их стало 5
 Дергаем ручку несколько раз, убеждаемся, что трафик расходится по нескольким подам
 
-Можно использовать `parallel.sh` скрипт для этого (измените свой порт)
+Можно использовать `parallel.sh` скрипт для этого (измените свой хост/порт)
 ```shell
 chmod +x parallel.sh
 ./parallel.sh
