@@ -1,10 +1,7 @@
-import asyncio
 import logging
-
-from fastapi import FastAPI, HTTPException
 import os
 
-
+from fastapi import FastAPI, HTTPException
 
 LOGGING = {
     "version": 1,
@@ -17,7 +14,7 @@ LOGGING = {
     },
     "handlers": {
         "console": {
-            "level": 'DEBUG',
+            "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
@@ -40,24 +37,15 @@ app = FastAPI()
 @app.get("/factorial")
 async def get_factorial(n: int | None = None) -> int:
     if n is None:
-        n = int(os.getenv('DEFAULT_N', 0))
-    logging.info('Start calculating')
+        n = int(os.getenv("DEFAULT_N", 0))
+    logging.info("Start calculating")
     if not n:
-        logging.warning('N is less than 1')
+        logging.warning("N is less than 1")
         raise HTTPException(status_code=400, detail="WTF bro?")
 
     result = 1
     for i in range(n):
         result *= i + 1
 
-    logging.info('prepare answer')
+    logging.info("prepare answer")
     return result
-
-
-@app.get(
-    "/ping",
-    responses={"200": {"content": {"application/json": {"example": {"status": "OK"}}}}},
-)
-async def ping() -> dict:
-    """Health check for service"""
-    return {"status": "OK"}
